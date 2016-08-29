@@ -172,7 +172,7 @@ Opening any application using browser link or through another application is cal
 - CoreData
 - CoreImage
 - QuartzCore
-- 
+
 **Sorting Techniques:**
 
 **Compare Method**
@@ -215,12 +215,19 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", va
 NSArray *results = [array_to_search filteredArrayUsingPredicate:predicate];
 ```
 
-**Static vs Dynamic Framework/Library:**
-
+**Framework vs Static Library:**
 - The biggest advantage a framework has over static libraries is that they act as a neat way of packaging up the compiled library binary and any related headers. They can be dropped into your project (just like the SDK's built-in frameworks like Foundation and UIKit) and they should just work (most of the time).
-
 - Static libraries are fine, but they require a bit of extra work on the part of the user. You need to link your project to the library and you need to copy the header files into your project or reference them somewhere by setting the appropriate header search paths in your build settings.
 
+**Static vs Dynamic Framework/Library:**
+- Library When dynamic libraries are linked, none of the library's code is included directly into the linked target. Instead, the libraries are loaded into memory at runtime prior to having symbols getting resolved.
+- Frameworks are similar to dynamic libraries. Both are dynamically linkable libraries, except a dynamic framework is a dynamic library embedded in a bundle. This allows for versioning of a dynamic library and sorting additional assets that are used by the library's code.
+- Unlike dynamic, linking static libraries includes the object file code from the library into the target's binary. This results in a larger size on disk and slower launch times. Because the library's code is added directly to the linked target's binary, it means that to update any code in the library, the linked target would also have to be rebuilt.
+- A static library is a container for a set of object files. Static libraries use the file extension ".a", which comes from the (ar)chive file3 type. An archive file was designed to contain a collection of files. This is ideal for the transport and use of many object files that comprise a single code library. However the linker can only use object files of a single architecture, so there are two different container formats for static libraries based on if they support single or multiple architectures.
+- A static **framework** is a bundle containing a static library file. These frameworks are just a convenient way to publish a static library that uses external assets; such as images, fonts, or language files. In addition, static frameworks behave exactly like static libraries. They are statically linked into the executable binary, not loaded at runtime.
+
+**How to use multithreading on single core processor?**
+Multi-threading is useful in a single core. If one thread in an application gets blocked waiting for something (say data from the network card or waiting for the disk to write data), the CPU can switch to another thread to keep working.
 
 **CoreData**
 
