@@ -3,23 +3,60 @@ Hey guys! I have compiled most commonly asked interview questions related to iOS
 
 ## Basics & Advance Concepts
 
-**ReusableIdentifier:**
-To re-use UITableViewCell and dequeue it instead of recreating, in order to improve performance.
-
 **Atomic:**
-Initialized value, thread safe, synchronized, performance costly
+Its a default attribute of property. It always returns an initialized value. Atomic is thread safe (synchronized) but comes with performance cost.
 
 **NonAtomic:**
-Performance efficient but not recommended for multithreading.
+Its not thread safe so using nonatomic on multithreading can corrupt data. Unlike atomic property its actually performance efficient.
 
 **Synthesize:**
-Creates property setter/getter on compile time because they won't be changing.
+This keyword creates property (setter or getter) on compile time because it cannot be changed at runtime.
 
 **Dynamic:**
-Creates/change getter on runtime.
+It creates or change getter on runtime.
+
+**Default attribute of a property:**
+atomic, readwrite, assign
+
+**strong vs weak:**
+
+**strong** is used with ARC which implies that you don’t need to worry about the retain count of an object. By using strong you own the object. ARC automatically releases it for you when you are done with it.
+
+**weak** ownership means that you don’t own the object instead you keep track of the object till the object was strongly referenced. As soon as the second object is released it loses is value.
+E.g. obj.x = ObjB
+obj has x as weak property, then its value will only be valid till ObjB remains in memory.
+
+**retain vs assign:**
+**retain** is used when you want to own an object (similar to strong in ARC). In MRC, retained object must be released manually inside dealloc.
+
+**assign** will simply assign the value to the attribute. As of its basic purpose purpose, it should be used for non-pointer attributes.
+
+**ReusableIdentifier:**
+reusableIdentifier is used to reuse UITableViewCell and dequeue it instead of recreating it. So when you have large number of rows, this practice is used in order to improve tableview performance.
 
 **Fast Enumeration:**
-It retrieves the element by its instance which is faster than iteration because its internal implementation reduces message passing overhead.
+Fast enumeration is faster because it retrieves the element by its instance which is faster than iteration. This way the its internal implementation reduces message passing overhead.
+
+**Frames vs Bounds:**
+**Frames** coordinates are calculated w.r.t superview whereas **Bounds** coordinates relative to its own coordinate system.
+
+**NSSet vs NSArray:**
+NSSet is faster than NSArray because it uses hash tables to retrieve data.
+
+**Category:**
+It is used to enhance functionality of an existing class without subclassing it. Class+CategoryName
+
+**Extension:**
+Extension should be implemented inside Main @implementation. Private methods, properties within the class can be made readwrite whereas readonly outside
+
+**Protocol:**
+Similar to interface in java, any class can implement protocol (required/optional methods) others can send messages to class without even knowing its type.
+
+**Delegate:**
+iOS basic design pattern in which one object acts on behalf of other object. it keeps reference to the object. Its a one-to-one message passing pattern.
+
+**NSNotificationCenter:**
+Publisher/Subscriber pattern, similar to broadcaster in java, to avoid coupling. It is many-to-many message passing pattern.
 
 **Posing:**
 To replace a class at runtime with a target class. NSObject PosAsClass
@@ -27,26 +64,8 @@ To replace a class at runtime with a target class. NSObject PosAsClass
 **Method Swizzling:**
 To replace the implementation of an existing selector at runtime. ViewWillAppear Example
 
-**Frames vs Bounds:**
-Frames (x,y) (width,height) w.r.t superview while Bounds (x,y) (width,height) relative to its own coordinates
-
-**NSSet vs NSArray:**
-NSSet is faster than NSArray because it uses hash tables to retrieve data.
-
-**Category:**
-Enhance functionality of existing class without subclassing. Class+CategoryName
-
-**Extension:**
-Should be implemented inside Main @implementation. Private methods, properties within the class can be made readwrite whereas readonly outside
-
-**Protocol:**
-Similar to interface in java, any class can implement protocol (required/optional methods) others can send messages to class without even knowing its type.
-
-**Delegate:**
-iOS basic design pattern in which one object acts on behalf of other object. it keeps reference to the object
-
-**NSNotificationCenter:**
-Publisher Subscriber pattern, similar to broadcaster in java, to avoid coupling.
+**Autorelease:**
+UIKit use code, it creates autorelease pool and add objects which should be autoreleased. once it completed and come back from your code, it drains the pool so memory will be released.
 
 **Apple Pay:**
 
@@ -73,9 +92,6 @@ Publisher Subscriber pattern, similar to broadcaster in java, to avoid coupling.
 
 - Foundation & UIKit Framework
 - iOS App Development
-
-**Autorelease:**
-UIKit use code it creates autorelease pool and add objects which should be autoreleased. once it completed and come back from your code, it drains the pool so memory will be released.
 
 **App States:**
 
@@ -126,7 +142,7 @@ The store and operating system optimize the installation of iOS apps by tailorin
 - **Bitcode:** It is an intermediate representation of a compiled program. Apps you upload to iTunes Connect that contain bitcode will be compiled and linked on the store. Including bitcode will allow Apple to re-optimize your app binary in the future without the need to submit a new version of your app to the store.
 - **On-Demand Resources:** Resources that you can tag with keywords and request in groups, by tag. The store hosts the resources on Apple servers and manages the downloads for you.
 
-**On Application Launch:**
+**Which method is invoked on application first launch?**
 application:didFinishLaunchingWithOptions
 App environments, third party lib, and other things are initialized at this stage.
 Options contains the information why application was launched; e.g if app is launched directly, options would be empty.
@@ -134,14 +150,19 @@ Options contains the information why application was launched; e.g if app is lau
 - UIApplicationLaunchOptionsSourceApplicationKey
 
 **Deep Linking:**
+Opening any application using browser link or through another application is called deep linking. It can be achieved through defining following properties inside .plist file
 ###### URL types
 - URL identifier - url e.g net.xmen.app
 - URL Schemes - Bundle ID
 
-**Async Downloading:**
+**What is the best practice for async task?**
 
 - In case of async task, UI should not be blocked, and only be update on main thread
 - Download images on tableview creation instead of cell
+
+**iOS Security Features:**
+- Application transport security (iOS 9.0)
+- Key chain
 
 **Frameworks to look at:**
 
@@ -151,12 +172,8 @@ Options contains the information why application was launched; e.g if app is lau
 - CoreData
 - CoreImage
 - QuartzCore
-
-**iOS Security:**
-- Application transport security (iOS 9.0)
-- Key chain
-
-**Sorting:**
+- 
+**Sorting Techniques:**
 
 **Compare Method**
 ```
@@ -181,7 +198,7 @@ NSArray *sortedArray = [drinkDetails sortedArrayUsingComparator:^NSComparisonRes
     return [first compare:second];
 }];
 ```
-**Searching:**
+**Searching Technique(s):**
 
 **Using Predicate**
 ```
@@ -198,7 +215,12 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", va
 NSArray *results = [array_to_search filteredArrayUsingPredicate:predicate];
 ```
 
-**Static vs Dynamic Framework/Library**
+**Static vs Dynamic Framework/Library:**
+
+- The biggest advantage a framework has over static libraries is that they act as a neat way of packaging up the compiled library binary and any related headers. They can be dropped into your project (just like the SDK's built-in frameworks like Foundation and UIKit) and they should just work (most of the time).
+
+- Static libraries are fine, but they require a bit of extra work on the part of the user. You need to link your project to the library and you need to copy the header files into your project or reference them somewhere by setting the appropriate header search paths in your build settings.
+
 
 **CoreData**
 
