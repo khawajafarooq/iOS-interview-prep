@@ -130,9 +130,8 @@ The store and operating system optimize the installation of iOS apps by tailorin
 application:didFinishLaunchingWithOptions
 App environments, third party lib, and other things are initialized at this stage.
 Options contains the information why application was launched; e.g if app is launched directly, options would be empty.
-
-UIApplicationLaunchOptionsURLKey
-UIApplicationLaunchOptionsSourceApplicationKey
+- UIApplicationLaunchOptionsURLKey
+- UIApplicationLaunchOptionsSourceApplicationKey
 
 **Deep Linking:**
 ###### URL types
@@ -144,7 +143,7 @@ UIApplicationLaunchOptionsSourceApplicationKey
 - In case of async task, UI should not be blocked, and only be update on main thread
 - Download images on tableview creation instead of cell
 
-**Frameworks:**
+**Frameworks to look at:**
 
 - CoreFoundation
 - CoreGraphics
@@ -154,8 +153,8 @@ UIApplicationLaunchOptionsSourceApplicationKey
 - QuartzCore
 
 **iOS Security:**
-Application transport security (iOS 9.0)
-Key chain
+- Application transport security (iOS 9.0)
+- Key chain
 
 **Sorting:**
 
@@ -232,5 +231,134 @@ It involves more work on coding part to apply transformation logic. Custom entit
 
 **Fully Manual Migration**
 Fully manual migrations are for those times when even specifying custom transformation logic isn’t enough to fully migrate data from one model version to another. E.g. update data across non-sequential versions, such as jumping from version 1 to 4.
+
+## Some coding challenges
+**Problem-1: Find the elements from the three array which existing in atleast 2 arrays**
+```
+-(NSArray *)findCommonElements:(NSArray*)array1
+                        array2:(NSArray*)array2
+                        array3:(NSArray*)array3
+{
+    
+    array1 = [array1 sortedArrayUsingSelector: @selector(compare:)];
+    array2 = [array2 sortedArrayUsingSelector: @selector(compare:)];
+    array3 = [array3 sortedArrayUsingSelector: @selector(compare:)];
+    
+    int size1 = (int)[array1 count];
+    int size2 = (int)[array2 count];
+    int size3 = (int)[array3 count];
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    
+    NSMutableArray *resultArray = [NSMutableArray array];
+    
+    while (i < size1 && j < size2 && k < size3) {
+        
+        int x = (int)[[array1 objectAtIndex:i] integerValue];
+        int y = (int)[[array2 objectAtIndex:j] integerValue];
+        int z = (int)[[array3 objectAtIndex:k] integerValue];
+        
+        if (x == y || y == z) {
+            [resultArray addObject:[array1 objectAtIndex:i]];
+            i++;j++;k++;
+        }
+        else if (x < y) {
+            i++;
+        }
+        else if (y < z) {
+            j++;
+        }
+        else {
+            k++;
+        }
+    }
+
+    return resultArray;
+}
+
+//calling method
+NSArray *a = @[@1,@3,@4,@5];
+NSArray *b = @[@-1,@3,@0,@9];
+NSArray *c = @[@0,@31,@32,@22,@6];
+NSArray *result = [self findCommonElements:a array2:b array3:c];
+
+// result will contain (1, 3)
+```
+
+**Problem-2: For a given interface test.h file:**
+```
+@interface TestClass: NSObject
+
+@property (atomic, readonly) NSArray *array;
+
+- (void)addObject:(NSString*)object;
+
+@end
+
+// Following is the invokation of class
+TestClass *obj= [[TestClass alloc] init];
+[obj addObject:@"North America"];
+[obj addObject:@"Asia"];
+[obj addObject:@"Africa"];
+
+/* Now obj.array will have three objects
+  1. North America
+  2. Asia
+  3. Africa
+*/
+```
+
+**write the implemention test.m**
+```
+@implementation TestClass
+
+- (void)addObject:(NSString*)object {
+    if(_array == nil) {
+        _array = [[NSArray alloc] initWithObjects:object, nil];
+    }
+    else {
+        NSMutableArray *mutableArray = [_array mutableCopy];
+        [mutableArray addObject:object];
+        _array = [mutableArray copy];
+    }
+}
+
+@end
+```
+**Problem-3: In a view controller in a storyboard I have a simple view which has a subview image with tag 0 and a subview label with tag 1. I'm trying to get the image like this:**
+```
+UIImageView *myImage = (UIImageView*)[myView viewWithTag:0];
+myImage.highlighted = YES;
+// following exception occurs
+-[UIView setHighlighted:]: unrecognized selector sent to instance
+```
+**It is clearly a UIImageView in the storyboard. Why would this cast not work?**
+###### All views have a 0 tag as a default so if you get a 0 view it could be any view. For it to work you need to use non-zero values that you set in your program or within Interface builder.
+
+**Problem-4: What is the output of following program?**
+```
+NSString * a = @“Bob”;
+NSString * b = @“Bob”;
+if (a == b) 
+{  NSLog (@“Equal”); }
+else 
+{ NSLog (@“Not equal”; }
+```
+###### output is "Equal" because objective-c is smart enough while comparing string value instead of instances (which is normal compilor behavior).
+
+**Problem-5: What is the value of array1 and array2 in following program?**
+```
+NSMutableArray* array1 = @[ @“A”, @“B” ];
+NSMutableArray* array2 = array1;
+[array1 setObject:@“C” atIndex:0];
+```
+
+Following would be the output because both of the arrays are pointing to same memory location. 
+###### Please note: @array2 = array1 it did not created the copy of array1 inside array2.
+```
+array1 = @[ @“C”, @“B” ];
+array2 = @[ @“C”, @“B” ];
+```
 
 ###### Always open to suggestions. Enjoy! 👍
