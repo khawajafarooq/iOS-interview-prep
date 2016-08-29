@@ -164,13 +164,10 @@ Opening any application using browser link or through another application is cal
 - Key chain
 
 **Frameworks to look at:**
-
-- CoreFoundation
-- CoreGraphics
-- CoreLocation
-- CoreData
-- CoreImage
-- QuartzCore
+- AFNetworking, Alamofire
+- CoreData, CoreLocation, QuartzCore, UIKit Dynamics
+- RxSwift
+- Moya, ObjectMapper
 
 **Sorting Techniques:**
 
