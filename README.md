@@ -19,7 +19,6 @@ It creates or change getter on runtime.
 atomic, readwrite, assign
 
 **strong vs weak:**
-
 **strong** is used with ARC which implies that you don’t need to worry about the retain count of an object. By using strong you own the object. ARC automatically releases it for you when you are done with it.
 
 **weak** ownership means that you don’t own the object instead you keep track of the object till the object was strongly referenced. As soon as the second object is released it loses is value.
@@ -261,7 +260,7 @@ It involves more work on coding part to apply transformation logic. Custom entit
 **Fully Manual Migration**
 Fully manual migrations are for those times when even specifying custom transformation logic isn’t enough to fully migrate data from one model version to another. E.g. update data across non-sequential versions, such as jumping from version 1 to 4.
 
-## Some coding challenges
+## Coding Challenges
 **Problem-1: Find the elements from the three array which existing in atleast 2 arrays**
 ```
 -(NSArray *)findCommonElements:(NSArray*)array1
@@ -390,4 +389,4 @@ array1 = @[ @“C”, @“B” ];
 array2 = @[ @“C”, @“B” ];
 ```
 
-###### Always open to suggestions. Enjoy! 👍
+###### Please contribute, always open to suggestions. Enjoy! 👍
