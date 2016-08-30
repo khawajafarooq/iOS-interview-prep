@@ -156,8 +156,9 @@ Opening any application using browser link or through another application is cal
 
 **What is the best practice for async task?**
 
-- In case of async task, UI should not be blocked, and only be update on main thread
-- Download images on tableview creation instead of cell
+- UI should never be blocked for async operations
+- Network operations should be performed on background thread
+- UI should be seemless and will only be updated on main thread (if there is an update)
 
 **iOS Security Features:**
 - Application transport security (iOS 9.0)
