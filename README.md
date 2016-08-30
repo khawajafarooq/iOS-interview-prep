@@ -161,8 +161,9 @@ Opening any application using browser link or through another application is cal
 - UI should be seemless and will only be updated on main thread (if there is an update)
 
 **iOS Security Features:**
-- Application transport security (iOS 9.0)
-- Key chain
+- **Application transport security (iOS 9.0):** It improves the privacy and data integrity of connections between an app and web services by enforcing additional security requirements for HTTP-based networking requests
+- **Keychain Services:** It  provides secure storage of passwords, keys, certificates, and notes for one or more users. A user can unlock a keychain with a single password, and any Keychain Services–aware application can then use that keychain to store and retrieve passwords.
+- **Touch ID:** Its one of the most secure ways to authenticate users within iOS apps, making the login experience more convenient and user-friendly. Touch ID uses the device fingerprint sensor to access secure data in the iOS keychain. This allows users to have one of the most unique “passwords” to secure their financial accounts—their own fingerprint—without having to worry about insecure practices such as writing down passwords or using complex passwords that are difficult to remember.
 
 **Frameworks to look at:**
 - AFNetworking, Alamofire
