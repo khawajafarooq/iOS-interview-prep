@@ -28,7 +28,7 @@ obj has x as weak property, then its value will only be valid till ObjB remains 
 **retain vs assign:**
 **retain** is used when you want to own an object (similar to strong in ARC). In MRC, retained object must be released manually inside dealloc.
 
-**assign** will simply assign the value to the attribute. As of its basic purpose purpose, it should be used for non-pointer attributes.
+**assign** will simply assign the value to the attribute. As of its basic purpose, it should be used for non-pointer attributes.
 
 **ReusableIdentifier:**
 reusableIdentifier is used to reuse UITableViewCell and dequeue it instead of recreating it. So when you have large number of rows, this practice is used in order to improve tableview performance.
