@@ -18,6 +18,9 @@ It creates or change getter on runtime.
 **Default attribute of a property:**
 atomic, readwrite, assign
 
+**retain:**
+It is used when you want to own an object (similar to strong in ARC). When you retain an object, its retain count is increased by 1. In MRC, retained object must be released manually inside dealloc.
+
 **strong vs weak:**
 **strong** is used with ARC which implies that you don’t need to worry about the retain count of an object. By using strong you own the object. ARC automatically releases it for you when you are done with it.
 
@@ -25,10 +28,53 @@ atomic, readwrite, assign
 E.g. obj.x = ObjB
 obj has x as weak property, then its value will only be valid till ObjB remains in memory.
 
-**retain vs assign:**
-**retain** is used when you want to own an object (similar to strong in ARC). In MRC, retained object must be released manually inside dealloc.
+**weak vs assign:**
+The only difference between weak and assign is that if the object a weak property points to is deallocated, then the value of the weak pointer will be set to nil, so that you never run the risk of accessing garbage. If you use assign, that won't happen, so if the object gets deallocated from under you and you try to access it, you will access garbage.
 
-**assign** will simply assign the value to the attribute. As of its basic purpose, it should be used for non-pointer attributes.
+**assign vs copy:**
+**assign** is the default. In the setter that is created by @synthesize, the value will simply be assigned to the attribute. My understanding is that "assign" should be used for non-pointer attributes.
+
+**copy** is needed when the object is mutable. Use this if you need the value of the object as it is at this moment, and you don't want that value to reflect any changes made by other owners of the object. You will need to release the object when you are finished with it because you are retaining the copy.
+
+**NSCoding:**
+The NSCoding protocol declares the two methods that a class must implement so that instances of that class can be encoded and decoded. This capability provides the basis for archiving (where objects and other structures are stored on disk) and distribution (where objects are copied to different address spaces).
+
+**Shallow Copy:**
+```
+newArray = [NSMutableArray arrayWithArray:oldArray];
+```
+
+**Deep Copy:**
+```
+@interface NSArray(deepCopy)
+
+-(NSArray *) deepCopy;
+
+@end
+
+@implementation
+
+-(NSArray *) deepCopy
+{
+    NSMutableArray *ret = [NSMutableArray array];
+
+    for (id val in self)
+    {
+        if ([val conformsToProtocol:@protocol(NSCopying)])
+        { 
+            [ret addObject:[val copy]];
+        }
+        else
+        {
+           [ret addObject:val];
+        }
+    }
+
+    return ret;
+}
+
+@end
+```
 
 **ReusableIdentifier:**
 reusableIdentifier is used to reuse UITableViewCell and dequeue it instead of recreating it. So when you have large number of rows, this practice is used in order to improve tableview performance.
@@ -162,7 +208,6 @@ Opening any application using browser link or through another application is cal
 
 **iOS Security Features:**
 - **Application transport security (iOS 9.0):** It improves the privacy and data integrity of connections between an app and web services by enforcing additional security requirements for HTTP-based networking requests
-- **Keychain Services:** It  provides secure storage of passwords, keys, certificates, and notes for one or more users. A user can unlock a keychain with a single password, and any Keychain Services–aware application can then use that keychain to store and retrieve passwords.
 - **Touch ID:** Its one of the most secure ways to authenticate users within iOS apps, making the login experience more convenient and user-friendly. Touch ID uses the device fingerprint sensor to access secure data in the iOS keychain. This allows users to have one of the most unique “passwords” to secure their financial accounts—their own fingerprint—without having to worry about insecure practices such as writing down passwords or using complex passwords that are difficult to remember.
 
 **Frameworks to look at:**
@@ -388,4 +433,4 @@ array1 = @[ @“C”, @“B” ];
 array2 = @[ @“C”, @“B” ];
 ```
 
-###### Please contribute, always open to suggestions. Enjoy! 👍
+###### You can always add value to this wiki. Hope it will be helpful! 👍
