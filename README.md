@@ -155,15 +155,10 @@ Key Value Observing, add observer to a property change
 **Blocks:**
 Function pointer, language level feature like lambda expression.
 
-**Threading:**
-- GCD (Grand Central Dispatch)
-- NSOperationQueue
-
 **GCD:**
 GCD provides following types of quesues to perform async tasks:
 - **Serial Queues**
   - Guaranteed serialized access to a shared resource that avoids race condition.
-  - Tasks are executed in a predictable order which means it will execute in same order as they are inserted.
   - You can create any number of serial queues.
 - **Concurrent Queues**
   - Executes multiple tasks in parallel
@@ -171,9 +166,9 @@ GCD provides following types of quesues to perform async tasks:
 
 **NSOperationQueue:**
 GCD is a low-level C API that enables developers to execute tasks concurrently. Operation queues, on the other hand, are high level abstraction of the queue model, and is built on top of GCD. Some common characteristics are below:
-- Don’t follow FIFO: in operation queues, you can set an execution priority for operations.
-- By default, they operate concurrently: there is still a workaround to execute tasks in operation queues in sequence by using dependencies between operations.
-- Operation queues are instances of class NSOperationQueue and its tasks are encapsulated in instances of NSOperation.
+- It provides dependency management between between operation.
+- Felxibility to pause, resume or cancel the operation at any point in time.
+- Comes with more controler like you can configure maximum number of operations allowed.
 
 **NSOperation:**
 Tasks submitted to operation queues are in the form of NSOperation instances.
